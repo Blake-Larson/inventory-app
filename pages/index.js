@@ -1,6 +1,6 @@
 import { supabase } from '../lib/initSupabase';
 import { Auth } from '@supabase/ui';
-import TodoList from '../components/TodoList';
+import Inventory from '../components/Inventory';
 
 export default function IndexPage() {
 	const { user } = Auth.useUser();
@@ -23,7 +23,7 @@ export default function IndexPage() {
 					className='w-full h-full flex flex-col justify-center items-center p-4'
 					style={{ minWidth: 250, maxWidth: 600, margin: 'auto' }}
 				>
-					<TodoList user={supabase.auth.user()} />
+					<Inventory user={supabase.auth.user()} />
 					<button
 						className='btn-black w-24 mt-12'
 						onClick={async () => {

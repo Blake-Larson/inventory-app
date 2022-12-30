@@ -13,6 +13,7 @@ const Inventory = ({ user }) => {
 		price_each: '',
 	});
 	const [errorText, setError] = useState('');
+	const [runFetch, setRunFetch] = useState(false);
 	const categories = [
 		'Hats',
 		"Men's Clothing",
@@ -37,7 +38,7 @@ const Inventory = ({ user }) => {
 
 	useEffect(() => {
 		fetchInventory();
-	}, []);
+	}, [runFetch]);
 
 	const fetchInventory = async () => {
 		let { data: inventory, error } = await supabase
@@ -77,6 +78,32 @@ const Inventory = ({ user }) => {
 		}
 	};
 
+	const updateItem = async (event, id) => {
+		event.preventDefault();
+		let { error } = await supabase
+			.from('inventory')
+			.update({
+				product: capitalize(newItem.product),
+			})
+			.select('product')
+			.eq('id', id);
+		if (error) {
+			setError(error.message);
+		} else {
+			setRunFetch(!runFetch);
+			setNewItem({
+				product: '',
+				category: '',
+				quantity: 0,
+				price_each: '',
+			});
+			setEdit({
+				id: null,
+				active: false,
+			});
+		}
+	};
+
 	const deleteItem = async id => {
 		try {
 			await supabase.from('inventory').delete().eq('id', id);
@@ -84,6 +111,18 @@ const Inventory = ({ user }) => {
 		} catch (error) {
 			console.log('error', error);
 		}
+	};
+
+	const [edit, setEdit] = useState({
+		id: null,
+		active: false,
+	});
+
+	const editItem = async id => {
+		setEdit({
+			id: id,
+			active: true,
+		});
 	};
 
 	return (
@@ -162,6 +201,11 @@ const Inventory = ({ user }) => {
 								key={item.id}
 								item={item}
 								deleteItem={() => deleteItem(item.id)}
+								newItem={newItem}
+								handleFormChange={handleFormChange}
+								updateItem={updateItem}
+								edit={edit}
+								editItem={editItem}
 							/>
 						))}
 					</tbody>

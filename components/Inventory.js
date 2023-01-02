@@ -15,6 +15,7 @@ const Inventory = ({ user }) => {
 	const [errorText, setError] = useState('');
 	const [runFetch, setRunFetch] = useState(false);
 	const categories = [
+		'None',
 		'Hats',
 		"Men's Clothing",
 		"Women's Clothing",
@@ -78,17 +79,23 @@ const Inventory = ({ user }) => {
 		}
 	};
 
-	const updateItem = async (event, id) => {
+	const updateItem = async (event, id, item) => {
 		event.preventDefault();
-		let { error } = await supabase
+		let response;
+		response = await supabase
 			.from('inventory')
 			.update({
-				product: capitalize(newItem.product),
+				product: capitalize(item.product),
+				category: item.category,
+				quantity: item.quantity,
+				price_each: parseFloat(item.price_each),
+				price_total: parseFloat(
+					(parseFloat(item.price_each) * item.quantity).toFixed(2)
+				),
 			})
-			.select('product')
 			.eq('id', id);
-		if (error) {
-			setError(error.message);
+		if (response.error) {
+			setError(response.error.message);
 		} else {
 			setRunFetch(!runFetch);
 			setNewItem({
@@ -118,9 +125,10 @@ const Inventory = ({ user }) => {
 		active: false,
 	});
 
-	const editItem = async id => {
+	const editItem = async (id, col) => {
 		setEdit({
 			id: id,
+			col: col,
 			active: true,
 		});
 	};
@@ -185,12 +193,12 @@ const Inventory = ({ user }) => {
 					<thead>
 						<tr className='text-left'>
 							<th className='w-60'>Product</th>
-							<th className='w-52'>Category</th>
-							<th className='w-24'>Qty</th>
-							<th className='w-24'>
+							<th className='w-60'>Category</th>
+							<th className='w-28'>Qty</th>
+							<th className='w-28'>
 								Price<span className='opacity-60 font-normal'>(Each)</span>
 							</th>
-							<th className='w-24'>
+							<th className='w-28'>
 								Price<span className='opacity-60 font-normal'>(Total)</span>
 							</th>
 						</tr>
@@ -206,6 +214,7 @@ const Inventory = ({ user }) => {
 								updateItem={updateItem}
 								edit={edit}
 								editItem={editItem}
+								selectCategory={selectCategory}
 							/>
 						))}
 					</tbody>

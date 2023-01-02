@@ -135,7 +135,8 @@ const Inventory = ({ user }) => {
 
 	return (
 		<div className='flex flex-col'>
-			<h1 className='mb-12'>Inventory</h1>
+			<h1 className='text-7xl font-bold'>Inventory</h1>
+			<h2 className='mb-12 text-xl'>*Click any item to edit it.</h2>
 			{!!errorText && <Alert text={errorText} />}
 			<form className='flex gap-2 my-2' onSubmit={addItem}>
 				<label className='flex flex-col'>

@@ -19,6 +19,8 @@ export default function IndexPage() {
 				</div>
 			) : (
 				<div className='w-full h-full flex flex-col items-center p-4'>
+					<h1 className='text-7xl font-bold'>Inventory</h1>
+					<h2 className='mb-12 text-xl'>*Click any item to edit it.</h2>
 					<Inventory user={supabase.auth.user()} />
 					<button
 						className='btn-black w-24 mt-12'

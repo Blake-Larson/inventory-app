@@ -1,4 +1,5 @@
 import { supabase } from '../lib/initSupabase';
+import { capitalize } from '../utilities/stringHooks';
 
 const handleUpdate = async item => {
 	return await supabase

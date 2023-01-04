@@ -1,27 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { checkIcon } from '../assets/icons/check-icon';
 import handleUpdate from '../utilities/handleUpdate';
+import selectCategory from '../utilities/categoryHelper';
 
-const EditCol = ({ item, column, runFetch, setRunFetch }) => {
+const EditCol = ({
+	item,
+	column,
+	formType,
+	setEdit,
+	runFetch,
+	setRunFetch,
+}) => {
 	const [newItem, setNewItem] = useState({
 		product: '',
 		category: '',
 		quantity: 0,
 		price_each: '',
-	});
-	const categories = [
-		'None',
-		'Hats',
-		"Men's Clothing",
-		"Women's Clothing",
-		'Accessories',
-	];
-	const selectCategory = categories.map((el, i) => {
-		return (
-			<option key={i} value={el}>
-				{el}
-			</option>
-		);
 	});
 
 	function handleFormChange(event) {
@@ -71,16 +65,32 @@ const EditCol = ({ item, column, runFetch, setRunFetch }) => {
 			className='flex items-center gap-1'
 			onSubmit={event => handleSubmit(event)}
 		>
-			<input
-				ref={inputRef}
-				className='rounded p-2 w-44 border'
-				name={column}
-				type='text'
-				placeholder={item.column}
-				value={newItem.column}
-				onChange={handleFormChange}
-			/>
-			<button className='cursor-pointer'>{checkIcon}</button>
+			{formType === 'select' ? (
+				<select
+					className='rounded p-2'
+					value={newItem[column]}
+					onChange={handleFormChange}
+					name={column}
+				>
+					<option value=''>--Select a Category--</option>
+					{selectCategory}
+				</select>
+			) : (
+				<input
+					ref={inputRef}
+					className={`rounded p-2 border ${
+						column === 'product' ? 'w-44' : 'w-16'
+					}`}
+					name={column}
+					type={formType}
+					placeholder={item[column]}
+					value={newItem[column]}
+					onChange={handleFormChange}
+				/>
+			)}
+			<button className='cursor-pointer hover:bg-green-500 rounded-full ease-in-out duration-300 p-1'>
+				{checkIcon}
+			</button>
 		</form>
 	);
 };

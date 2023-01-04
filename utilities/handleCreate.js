@@ -1,7 +1,8 @@
 import { supabase } from '../lib/initSupabase';
 import { capitalize } from '../utilities/stringHooks';
 
-const handleCreate = async () => {
+const handleCreate = async newItem => {
+	const user = supabase.auth.user();
 	return await supabase
 		.from('inventory')
 		.insert({

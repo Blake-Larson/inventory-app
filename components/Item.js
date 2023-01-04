@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { xIcon } from '../assets/icons/x-icon';
 import EditCol from './EditCol';
 import handleDelete from '../utilities/handleDelete';
 
-const Item = ({ item, inventory, setInventory }) => {
+const Item = ({ item, inventory, setInventory, runFetch, setRunFetch }) => {
 	const deleteItem = async () => {
 		try {
 			await handleDelete(item.id);
@@ -26,81 +26,6 @@ const Item = ({ item, inventory, setInventory }) => {
 		});
 	};
 
-	// const categoryEdit = (
-	// 	<form
-	// 		className='flex items-center gap-1'
-	// 		onSubmit={event => {
-	// 			item.category = newItem.category;
-	// 			updateItem(event, item.id, item);
-	// 		}}
-	// 	>
-	// 		<select
-	// 			className='rounded p-2'
-	// 			value={newItem.category ? newItem.category : item.category}
-	// 			onChange={handleFormChange}
-	// 			name='category'
-	// 		>
-	// 			<option value=''>--Select a Category--</option>
-	// 			{selectCategory}
-	// 		</select>
-	// 		{/* <button className='cursor-pointer'>{checkIcon}</button> */}
-	// 	</form>
-	// );
-	// const quantityEdit = (
-	// 	<form
-	// 		className='flex items-center gap-1'
-	// 		onSubmit={event => {
-	// 			if (newItem.quantity) {
-	// 				item.quantity = newItem.quantity;
-	// 				updateItem(event, item.id, item);
-	// 			} else {
-	// 				event.preventDefault();
-	// 				setEdit({
-	// 					id: null,
-	// 					active: false,
-	// 				});
-	// 			}
-	// 		}}
-	// 	>
-	// 		<input
-	// 			className='rounded p-2 w-20'
-	// 			name='quantity'
-	// 			type='number'
-	// 			placeholder={item.quantity}
-	// 			value={newItem.quantity} //{newItem.quantity ? newItem.quantity : item.quantity}
-	// 			onChange={handleFormChange}
-	// 		/>
-	// 		{/* <button className='cursor-pointer'>{checkIcon}</button> */}
-	// 	</form>
-	// );
-	// const price_eachEdit = (
-	// 	<form
-	// 		className='flex items-center gap-1'
-	// 		onSubmit={event => {
-	// 			if (newItem.price_each) {
-	// 				item.price_each = newItem.price_each;
-	// 				updateItem(event, item.id, item);
-	// 			} else {
-	// 				event.preventDefault();
-	// 				setEdit({
-	// 					id: null,
-	// 					active: false,
-	// 				});
-	// 			}
-	// 		}}
-	// 	>
-	// 		<input
-	// 			className='rounded p-2 w-20'
-	// 			name='price_each'
-	// 			type='text'
-	// 			placeholder={`${item.price_each}`}
-	// 			value={newItem.price_each} //`${newItem.price_each ? newItem.price_each : item.price_each}`}
-	// 			onChange={handleFormChange}
-	// 		/>
-	// 		{/* <button className='cursor-pointer'>{checkIcon}</button> */}
-	// 	</form>
-	// );
-
 	return (
 		<tr className='h-14'>
 			<td
@@ -110,7 +35,9 @@ const Item = ({ item, inventory, setInventory }) => {
 				{edit.id === item.id && edit.col === 'product' && edit.active ? (
 					<EditCol
 						item={item}
+						setEdit={setEdit}
 						column={'product'}
+						formType={'text'}
 						runFetch={runFetch}
 						setRunFetch={setRunFetch}
 					/>
@@ -122,31 +49,58 @@ const Item = ({ item, inventory, setInventory }) => {
 				className='cursor-pointer'
 				onClick={() => editItem(item.id, 'category')}
 			>
-				{edit.id === item.id && edit.col === 'category' && edit.active
-					? categoryEdit
-					: item.category}
+				{edit.id === item.id && edit.col === 'category' && edit.active ? (
+					<EditCol
+						item={item}
+						setEdit={setEdit}
+						column={'category'}
+						formType={'select'}
+						runFetch={runFetch}
+						setRunFetch={setRunFetch}
+					/>
+				) : (
+					item.category
+				)}
 			</td>
 			<td
 				className='cursor-pointer'
 				onClick={() => editItem(item.id, 'quantity')}
 			>
-				{edit.id === item.id && edit.col === 'quantity' && edit.active
-					? quantityEdit
-					: item.quantity}
+				{edit.id === item.id && edit.col === 'quantity' && edit.active ? (
+					<EditCol
+						item={item}
+						setEdit={setEdit}
+						column={'quantity'}
+						formType={'number'}
+						runFetch={runFetch}
+						setRunFetch={setRunFetch}
+					/>
+				) : (
+					item.quantity
+				)}
 			</td>
 			<td
 				className='cursor-pointer'
 				onClick={() => editItem(item.id, 'price_each')}
 			>
-				{edit.id === item.id && edit.col === 'price_each' && edit.active
-					? price_eachEdit
-					: `$${item.price_each}`}
+				{edit.id === item.id && edit.col === 'price_each' && edit.active ? (
+					<EditCol
+						item={item}
+						setEdit={setEdit}
+						column={'price_each'}
+						formType={'text'}
+						runFetch={runFetch}
+						setRunFetch={setRunFetch}
+					/>
+				) : (
+					`$${item.price_each}`
+				)}
 			</td>
 			<td>{`$${item.price_total}`}</td>
 			<td>
 				<div
 					onClick={deleteItem}
-					className='hover:opacity-100 opacity-40 cursor-pointer'
+					className='hover:opacity-100 opacity-40 cursor-pointer hover:bg-red-500 rounded-full ease-in-out duration-300 p-1'
 				>
 					{xIcon}
 				</div>

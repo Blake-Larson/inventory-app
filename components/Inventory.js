@@ -4,7 +4,7 @@ import Item from './Item';
 import handleRead from '../utilities/handleRead';
 import ItemAdd from './ItemAdd';
 
-const Inventory = ({ user }) => {
+const Inventory = () => {
 	const [inventory, setInventory] = useState([]);
 	const [errorText, setError] = useState('');
 	const [runFetch, setRunFetch] = useState(false);
@@ -22,7 +22,10 @@ const Inventory = ({ user }) => {
 
 	return (
 		<div className='flex flex-col'>
+			<h1 className='text-7xl font-bold'>Inventory</h1>
+			<h2 className='mb-12 text-xl'>*Click any item to edit it.</h2>
 			{!!errorText && <Alert text={errorText} />}
+			<ItemAdd inventory={inventory} setInventory={setInventory} />
 			<section className='p-5 bg-white shadow overflow-hidden rounded-md'>
 				<table className='table-fixed'>
 					<thead>
@@ -39,7 +42,6 @@ const Inventory = ({ user }) => {
 						</tr>
 					</thead>
 					<tbody className='gap-5'>
-						<ItemAdd />
 						{inventory.map(item => (
 							<Item
 								key={item.id}

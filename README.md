@@ -4,7 +4,7 @@ A full-stack application demo of an inventory system using Next.js and SQL with 
 
 [Live Site](https://demo-inventory-app-bl.netlify.app/)
 
-<p align="center" ><img align="center" src="https://github.com/Blake-Larson/my-music-studio/blob/main/client/src/assets/images/demo.jpg" alt="The inital view of Inventory App" /></p>
+<p align="center" ><img align="center" src="https://github.com/Blake-Larson/inventory-app/blob/main/assets/inventory-app.jpg" alt="The inital view of Inventory App" /></p>
 
 ## How It's Made:
 
